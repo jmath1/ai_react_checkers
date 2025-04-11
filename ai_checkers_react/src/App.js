@@ -38,7 +38,8 @@ const App = () => {
 
   const sendMoveToAI = async (move) => {
     try {
-      const response = await fetch("http://localhost:5000/move", {
+      const apiUrl = process.env["API_URL"] || "http://localhost:5000";
+      const response = await fetch(`${apiUrl}/move`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ move }),
