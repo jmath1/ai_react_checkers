@@ -49,11 +49,11 @@
     transparent 50%
   ); /* Glossy highlight */
   position: relative;
-  transition: transform 0.2s ease; /* Smooth hover effect */
+  transition: transform 0.4s ease; /* Smooth hover effect */
 }
 
 .piece:hover {
-  transform: scale(1.05); /* Slight scale-up on hover */
+  transform: scale(1.08); /* Slight scale-up on hover */
 }
 
 .king .king-label {
