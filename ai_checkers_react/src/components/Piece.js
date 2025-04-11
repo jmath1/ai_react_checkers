@@ -1,11 +1,12 @@
 import React from "react";
 
-const Piece = ({ piece }) => {
+const Piece = ({ piece, humanColor, aiColor }) => {
+  const pieceColor = piece > 0 ? humanColor : aiColor;
+
   return (
     <div
-      className={`piece ${piece > 0 ? "red-piece" : "black-piece"} ${
-        Math.abs(piece) === 2 ? "king" : ""
-      }`}
+      className={`piece ${Math.abs(piece) === 2 ? "king" : ""}`}
+      style={{ backgroundColor: pieceColor }}
     >
       {Math.abs(piece) === 2 && <span className="king-label">K</span>}
     </div>
