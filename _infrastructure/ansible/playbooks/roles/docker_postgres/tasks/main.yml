@@ -1,0 +1,17 @@
+---
+- name: Make volume directory
+  shell: mkdir -p /home/ubuntu/postgresql/data
+- name: Create a postgres docker container
+  docker_container:
+    name: postgres
+    image: postgres:17.4
+    env:
+      POSTGRES_USER: "{{ db_user }}"
+      POSTGRES_PASSWORD: "{{ db_password }}"
+      POSTGRES_DB: "{{ db_name }}"
+    state: started
+    restart_policy: always
+    network_mode: host
+    volumes:
+      - /home/ubuntu/postgresql/data:/var/lib/postgresql/data
+  when: lookup('env', 'TF_VAR_use_rds') | bool == false

@@ -1,0 +1,12 @@
+- name: Run Django container
+  docker_container:
+    name: django
+    image: "{{ ecr_repository.stdout }}:latest"
+    state: started
+    restart_policy: always
+    network_mode: host
+    pull: yes
+    env:
+      CLOUD: "True"
+- name: Run Migrations
+  command: /bin/bash -c "docker exec django python manage.py migrate"
