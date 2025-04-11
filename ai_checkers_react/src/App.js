@@ -17,29 +17,29 @@ const initialBoard = [
 
 const App = () => {
   const [board, setBoard] = useState(initialBoard);
-  const [currentPlayer, setCurrentPlayer] = useState(1); // 1 = Human, -1 = AI
+  const [currentPlayer, setCurrentPlayer] = useState(-1); // -1 = Human (Black), 1 = AI (Red)
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [winner, setWinner] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-  const [humanColor, setHumanColor] = useState("#ff0000"); // Default red
-  const [aiColor, setAiColor] = useState("#000000"); // Default black
+  const [humanColor, setHumanColor] = useState("#000000"); // Default black
+  const [aiColor, setAiColor] = useState("#ff0000"); // Default red
 
   useEffect(() => {
     // Reset game on component mount (page load/refresh)
     resetGame();
-  }, []); //
+  }, []);
 
   useEffect(() => {
     const redPieces = board.flat().filter((x) => x > 0).length;
     const blackPieces = board.flat().filter((x) => x < 0).length;
-    if (redPieces === 0) setWinner(-1); // AI wins
-    if (blackPieces === 0) setWinner(1); // Human wins
+    if (redPieces === 0) setWinner(-1); // Human wins
+    if (blackPieces === 0) setWinner(1); // AI wins
   }, [board]);
 
   const sendMoveToAI = async (move) => {
     try {
       const apiUrl = process.env["API_URL"] || "http://localhost:5000";
-      const response = await fetch(`${apiUrl}/move`, {
+      const response = await fetch(`${apiUrl}/checkers/move`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ move }),
@@ -47,7 +47,7 @@ const App = () => {
       const data = await response.json();
       setBoard(data.board);
       setGameOver(data.game_over);
-      setCurrentPlayer(1); // Back to human
+      setCurrentPlayer(-1); // Back to human
     } catch (error) {
       console.error("Error communicating with AI:", error);
     }
@@ -55,13 +55,13 @@ const App = () => {
 
   const resetGame = async () => {
     try {
-      const response = await fetch("http://localhost:5000/reset", {
+      const response = await fetch("http://localhost:5000/checkers/reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
       setBoard(data.board);
-      setCurrentPlayer(1);
+      setCurrentPlayer(-1);
       setSelectedPiece(null);
       setWinner(null);
       setGameOver(false);
@@ -73,18 +73,22 @@ const App = () => {
   return (
     <div className="container">
       <h1>Checkers Game</h1>
-      <p>Current Player: {currentPlayer === 1 ? "You" : "AI"}</p>
+      <p>Current Player: {currentPlayer === -1 ? "You" : "AI"}</p>
       {winner && (
-        <p className="winner">Winner: {winner === 1 ? "You" : "AI"}!</p>
+        <p className="winner">Winner: {winner === -1 ? "You" : "AI "}!</p>
       )}
       {gameOver && !winner && <p className="winner">Game Over!</p>}
       <div className="color-controls">
         <ColorPicker
-          label="Your Pieces"
+          label="AI Pieces"
           color={humanColor}
           onChange={setHumanColor}
         />
-        <ColorPicker label="AI Pieces" color={aiColor} onChange={setAiColor} />
+        <ColorPicker
+          label="Your Pieces"
+          color={aiColor}
+          onChange={setAiColor}
+        />
       </div>
       <Board
         board={board}

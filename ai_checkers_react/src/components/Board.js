@@ -14,11 +14,11 @@ const Board = ({
   aiColor,
 }) => {
   const handleSquareClick = (row, col) => {
-    if (currentPlayer !== 1 || gameOver) return;
+    if (currentPlayer !== -1 || gameOver) return;
 
     const piece = board[row][col];
 
-    if (!selectedPiece && piece !== 0 && piece > 0) {
+    if (!selectedPiece && piece !== 0 && piece < 0) {
       setSelectedPiece([row, col]);
       return;
     }
@@ -33,7 +33,7 @@ const Board = ({
         const newBoard = applyMove(board, move);
         setBoard(newBoard);
         setSelectedPiece(null);
-        setCurrentPlayer(-1);
+        setCurrentPlayer(1);
         sendMoveToAI(move);
       } else {
         setSelectedPiece(null);
@@ -50,7 +50,7 @@ const Board = ({
     if (toRow < 0 || toRow > 7 || toCol < 0 || toCol > 7) return false;
     if (board[toRow][toCol] !== 0) return false;
 
-    if (!isKing && piece > 0 && rowDiff < 0) return false;
+    if (!isKing && piece < 0 && rowDiff > 0) return false;
 
     if (Math.abs(rowDiff) === 1) return true;
 
@@ -58,7 +58,7 @@ const Board = ({
       const midRow = (fromRow + toRow) / 2;
       const midCol = (fromCol + toCol) / 2;
       const midPiece = board[midRow][midCol];
-      return midPiece !== 0 && midPiece < 0;
+      return midPiece !== 0 && midPiece > 0;
     }
     return false;
   };
@@ -73,7 +73,9 @@ const Board = ({
       const midCol = (fromCol + toCol) / 2;
       newBoard[midRow][midCol] = 0;
     }
-    if (toRow === 7 && newBoard[toRow][toCol] === 1) newBoard[toRow][toCol] = 2;
+    if (toRow === 0 && newBoard[toRow][toCol] === -1)
+      newBoard[toRow][toCol] = -2; // Black King
+    if (toRow === 7 && newBoard[toRow][toCol] === 1) newBoard[toRow][toCol] = 2; // Red King
     return newBoard;
   };
 
