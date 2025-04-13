@@ -3,7 +3,9 @@ import "./App.css";
 import Board from "./components/Board";
 import GameControls from "./components/GameControls";
 import ColorPicker from "./components/ColorPicker";
+
 import { ColorProvider, useColorContext } from "./context/ColorContext";
+import { GameProvider, useGameContext } from "./context/GameContext";
 
 const initialBoard = [
   [0, 1, 0, 1, 0, 1, 0, 1],
@@ -22,6 +24,7 @@ const AppContent = () => {
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [winner, setWinner] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+
   const {
     humanColor,
     aiColor,
@@ -32,6 +35,8 @@ const AppContent = () => {
     lightSquareColor,
     setLightSquareColor,
   } = useColorContext();
+
+  const { gameType, setGameType } = useGameContext();
 
   useEffect(() => {
     resetGame();
@@ -54,7 +59,18 @@ const AppContent = () => {
 
   return (
     <div className="container">
-      <h1>Checkers Game</h1>
+      <select
+        value={gameType}
+        onChange={(e) => {
+          setGameType(e.target.value);
+          resetGame();
+        }}
+      >
+        <option value="checkers">Checkers</option>
+        <option value="chess">Chess</option>
+      </select>
+
+      <h1>{gameType === "checkers" ? "Checkers" : "Chess"} Game</h1>
       <p>Current Player: {currentPlayer === -1 ? "You (Black)" : "AI (Red)"}</p>
       {winner && (
         <p className="winner">
@@ -98,9 +114,11 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <ColorProvider>
-      <AppContent />
-    </ColorProvider>
+    <GameProvider>
+      <ColorProvider>
+        <AppContent />
+      </ColorProvider>
+    </GameProvider>
   );
 };
 
