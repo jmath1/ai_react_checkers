@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import Board from "./components/Board";
+import ChessBoard from "./components/ChessBoard";
 import GameControls from "./components/GameControls";
-import ColorPicker from "./components/ColorPicker";
+import ColorControls from "./components/ColorControls";
 
-import { ColorProvider, useColorContext } from "./context/ColorContext";
+import { ColorProvider } from "./context/ColorContext";
 import { GameProvider, useGameContext } from "./context/GameContext";
 
 const initialBoard = [
@@ -24,17 +25,6 @@ const AppContent = () => {
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [winner, setWinner] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-
-  const {
-    humanColor,
-    aiColor,
-    setHumanColor,
-    setAiColor,
-    darkSquareColor,
-    setDarkSquareColor,
-    lightSquareColor,
-    setLightSquareColor,
-  } = useColorContext();
 
   const { gameType, setGameType } = useGameContext();
 
@@ -78,36 +68,20 @@ const AppContent = () => {
         </p>
       )}
       {gameOver && !winner && <p className="winner">Game Over!</p>}
-      <div className="color-controls">
-        <ColorPicker
-          label="Your Pieces"
-          color={humanColor}
-          onChange={setHumanColor}
+      <ColorControls />
+
+      <div className="board-container">
+        <Board
+          board={board}
+          currentPlayer={currentPlayer}
+          selectedPiece={selectedPiece}
+          setSelectedPiece={setSelectedPiece}
+          setBoard={setBoard}
+          setCurrentPlayer={setCurrentPlayer}
+          gameOver={gameOver}
         />
-        <ColorPicker label="AI Pieces" color={aiColor} onChange={setAiColor} />
-        <br></br>
-        <br></br>
-        <ColorPicker
-          label="Dark Squares"
-          color={darkSquareColor}
-          onChange={setDarkSquareColor}
-        />
-        <ColorPicker
-          label="Light Squares"
-          color={lightSquareColor}
-          onChange={setLightSquareColor}
-        />
+        <GameControls resetGame={resetGame} />
       </div>
-      <Board
-        board={board}
-        currentPlayer={currentPlayer}
-        selectedPiece={selectedPiece}
-        setSelectedPiece={setSelectedPiece}
-        setBoard={setBoard}
-        setCurrentPlayer={setCurrentPlayer}
-        gameOver={gameOver}
-      />
-      <GameControls resetGame={resetGame} />
     </div>
   );
 };
