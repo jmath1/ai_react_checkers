@@ -3,6 +3,7 @@ import "./App.css";
 import Board from "./components/Board";
 import GameControls from "./components/GameControls";
 import ColorPicker from "./components/ColorPicker";
+import { ColorProvider, useColorContext } from "./context/ColorContext";
 
 const initialBoard = [
   [0, 1, 0, 1, 0, 1, 0, 1],
@@ -15,17 +16,24 @@ const initialBoard = [
   [-1, 0, -1, 0, -1, 0, -1, 0],
 ];
 
-const App = () => {
+const AppContent = () => {
   const [board, setBoard] = useState(initialBoard);
   const [currentPlayer, setCurrentPlayer] = useState(-1); // -1 = Human (Black), 1 = AI (Red)
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [winner, setWinner] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-  const [humanColor, setHumanColor] = useState("#000000"); // Default black
-  const [aiColor, setAiColor] = useState("#ff0000"); // Default red
+  const {
+    humanColor,
+    aiColor,
+    setHumanColor,
+    setAiColor,
+    darkSquareColor,
+    setDarkSquareColor,
+    lightSquareColor,
+    setLightSquareColor,
+  } = useColorContext();
 
   useEffect(() => {
-    // Reset game on component mount (page load/refresh)
     resetGame();
   }, []);
 
@@ -36,58 +44,42 @@ const App = () => {
     if (blackPieces === 0) setWinner(1); // AI wins
   }, [board]);
 
-  const sendMoveToAI = async (move) => {
-    try {
-      const apiUrl = process.env["API_URL"] || "http://localhost:5000";
-      const response = await fetch(`${apiUrl}/checkers/move`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ move }),
-      });
-      const data = await response.json();
-      setBoard(data.board);
-      setGameOver(data.game_over);
-      setCurrentPlayer(-1); // Back to human
-    } catch (error) {
-      console.error("Error communicating with AI:", error);
-    }
-  };
-
-  const resetGame = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/checkers/reset", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await response.json();
-      setBoard(data.board);
-      setCurrentPlayer(-1);
-      setSelectedPiece(null);
-      setWinner(null);
-      setGameOver(false);
-    } catch (error) {
-      console.error("Error resetting game:", error);
-    }
+  const resetGame = () => {
+    setBoard(initialBoard);
+    setCurrentPlayer(-1);
+    setSelectedPiece(null);
+    setWinner(null);
+    setGameOver(false);
   };
 
   return (
     <div className="container">
       <h1>Checkers Game</h1>
-      <p>Current Player: {currentPlayer === -1 ? "You" : "AI"}</p>
+      <p>Current Player: {currentPlayer === -1 ? "You (Black)" : "AI (Red)"}</p>
       {winner && (
-        <p className="winner">Winner: {winner === -1 ? "You" : "AI "}!</p>
+        <p className="winner">
+          Winner: {winner === -1 ? "You (Black)" : "AI (Red)"}!
+        </p>
       )}
       {gameOver && !winner && <p className="winner">Game Over!</p>}
       <div className="color-controls">
         <ColorPicker
-          label="AI Pieces"
+          label="Your Pieces"
           color={humanColor}
           onChange={setHumanColor}
         />
+        <ColorPicker label="AI Pieces" color={aiColor} onChange={setAiColor} />
+        <br></br>
+        <br></br>
         <ColorPicker
-          label="Your Pieces"
-          color={aiColor}
-          onChange={setAiColor}
+          label="Dark Squares"
+          color={darkSquareColor}
+          onChange={setDarkSquareColor}
+        />
+        <ColorPicker
+          label="Light Squares"
+          color={lightSquareColor}
+          onChange={setLightSquareColor}
         />
       </div>
       <Board
@@ -97,13 +89,18 @@ const App = () => {
         setSelectedPiece={setSelectedPiece}
         setBoard={setBoard}
         setCurrentPlayer={setCurrentPlayer}
-        sendMoveToAI={sendMoveToAI}
         gameOver={gameOver}
-        humanColor={humanColor}
-        aiColor={aiColor}
       />
       <GameControls resetGame={resetGame} />
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <ColorProvider>
+      <AppContent />
+    </ColorProvider>
   );
 };
 

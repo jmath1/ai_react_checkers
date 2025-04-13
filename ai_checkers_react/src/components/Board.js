@@ -8,10 +8,7 @@ const Board = ({
   setSelectedPiece,
   setBoard,
   setCurrentPlayer,
-  sendMoveToAI,
   gameOver,
-  humanColor,
-  aiColor,
 }) => {
   const handleSquareClick = (row, col) => {
     if (currentPlayer !== -1 || gameOver) return;
@@ -34,7 +31,6 @@ const Board = ({
         setBoard(newBoard);
         setSelectedPiece(null);
         setCurrentPlayer(1);
-        sendMoveToAI(move);
       } else {
         setSelectedPiece(null);
       }
@@ -90,8 +86,6 @@ const Board = ({
             piece={board[rowIndex][colIndex]}
             selectedPiece={selectedPiece}
             handleSquareClick={handleSquareClick}
-            humanColor={humanColor}
-            aiColor={aiColor}
           />
         ))
       )}

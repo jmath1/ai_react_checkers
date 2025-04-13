@@ -1,6 +1,8 @@
 import React from "react";
+import { useColorContext } from "../context/ColorContext";
 
-const Piece = ({ piece, humanColor, aiColor }) => {
+const Piece = ({ piece }) => {
+  const { humanColor, aiColor } = useColorContext();
   const pieceColor = piece > 0 ? humanColor : aiColor;
 
   return (
