@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from checkers_logic import Checkers
-from chess_logic import Chess
+from logic.checkers_logic import Checkers
+from logic.chess_logic import Chess
 
 app = Flask(__name__)
 
