@@ -3,7 +3,7 @@ import { useColorContext } from "../context/ColorContext";
 
 const CheckersPiece = ({ piece }) => {
   const { humanColor, aiColor } = useColorContext();
-  const pieceColor = piece > 0 ? humanColor : aiColor;
+  const pieceColor = piece > 0 ? aiColor : humanColor;
 
   return (
     <div

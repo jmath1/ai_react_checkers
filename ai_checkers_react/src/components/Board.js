@@ -8,6 +8,7 @@ const Board = ({
   setSelectedPiece,
   setBoard,
   setCurrentPlayer,
+  sendMoveToAI,
   gameOver,
 }) => {
   const handleSquareClick = (row, col) => {
@@ -31,6 +32,7 @@ const Board = ({
         setBoard(newBoard);
         setSelectedPiece(null);
         setCurrentPlayer(1);
+        sendMoveToAI(move);
       } else {
         setSelectedPiece(null);
       }

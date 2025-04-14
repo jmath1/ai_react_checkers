@@ -14,12 +14,12 @@ const ColorControls = ({ color, setColor }) => {
   } = useColorContext();
   return (
     <div className="color-controls">
+      <ColorPicker label="AI Pieces" color={aiColor} onChange={setAiColor} />
       <ColorPicker
         label="Your Pieces"
         color={humanColor}
         onChange={setHumanColor}
       />
-      <ColorPicker label="AI Pieces" color={aiColor} onChange={setAiColor} />
       <br></br>
       <br></br>
       <ColorPicker

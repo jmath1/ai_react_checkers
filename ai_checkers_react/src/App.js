@@ -39,12 +39,38 @@ const AppContent = () => {
     if (blackPieces === 0) setWinner(1); // AI wins
   }, [board]);
 
-  const resetGame = () => {
-    setBoard(initialBoard);
-    setCurrentPlayer(-1);
-    setSelectedPiece(null);
-    setWinner(null);
-    setGameOver(false);
+  const resetGame = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/checkers/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await response.json();
+      setBoard(data.board);
+      setCurrentPlayer(-1);
+      setSelectedPiece(null);
+      setWinner(null);
+      setGameOver(false);
+    } catch (error) {
+      console.error("Error resetting game:", error);
+    }
+  };
+
+  const sendMoveToAI = async (move) => {
+    try {
+      const apiUrl = process.env["API_URL"] || "http://localhost:5000";
+      const response = await fetch(`${apiUrl}/checkers/move`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ move }),
+      });
+      const data = await response.json();
+      setBoard(data.board);
+      setGameOver(data.game_over);
+      setCurrentPlayer(-1); // Back to human
+    } catch (error) {
+      console.error("Error communicating with AI:", error);
+    }
   };
 
   return (
@@ -79,6 +105,7 @@ const AppContent = () => {
           setBoard={setBoard}
           setCurrentPlayer={setCurrentPlayer}
           gameOver={gameOver}
+          sendMoveToAI={sendMoveToAI}
         />
         <GameControls resetGame={resetGame} />
       </div>
