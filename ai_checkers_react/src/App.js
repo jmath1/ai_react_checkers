@@ -8,6 +8,7 @@ import ColorControls from "./components/ColorControls";
 import { ColorProvider } from "./context/ColorContext";
 import { GameProvider, useGameContext } from "./context/GameContext";
 import GameDirection from "./components/GameDirection";
+import useCheckWinner from "./hooks/useCheckWinner";
 
 const initialBoard = [
   [0, 1, 0, 1, 0, 1, 0, 1],
@@ -26,19 +27,13 @@ const AppContent = () => {
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [winner, setWinner] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-
   const { gameType, setGameType } = useGameContext();
 
   useEffect(() => {
     resetGame();
   }, []);
 
-  useEffect(() => {
-    const redPieces = board.flat().filter((x) => x > 0).length;
-    const blackPieces = board.flat().filter((x) => x < 0).length;
-    if (redPieces === 0) setWinner(-1); // Human wins
-    if (blackPieces === 0) setWinner(1); // AI wins
-  }, [board]);
+  useCheckWinner(board, setWinner);
 
   const resetGame = async () => {
     try {
