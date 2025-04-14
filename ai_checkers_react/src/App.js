@@ -7,6 +7,7 @@ import ColorControls from "./components/ColorControls";
 
 import { ColorProvider } from "./context/ColorContext";
 import { GameProvider, useGameContext } from "./context/GameContext";
+import GameDirection from "./components/GameDirection";
 
 const initialBoard = [
   [0, 1, 0, 1, 0, 1, 0, 1],
@@ -85,15 +86,13 @@ const AppContent = () => {
         <option value="checkers">Checkers</option>
         <option value="chess">Chess</option>
       </select>
+      <GameDirection
+        gameType={gameType}
+        winner={winner}
+        gameOver={gameOver}
+        currentPlayer={currentPlayer}
+      />
 
-      <h1>{gameType === "checkers" ? "Checkers" : "Chess"} Game</h1>
-      <p>Current Player: {currentPlayer === -1 ? "You (Black)" : "AI (Red)"}</p>
-      {winner && (
-        <p className="winner">
-          Winner: {winner === -1 ? "You (Black)" : "AI (Red)"}!
-        </p>
-      )}
-      {gameOver && !winner && <p className="winner">Game Over!</p>}
       <ColorControls />
 
       <div className="board-container">
