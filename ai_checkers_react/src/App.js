@@ -9,6 +9,7 @@ import { ColorProvider } from "./context/ColorContext";
 import { GameProvider, useGameContext } from "./context/GameContext";
 import GameDirection from "./components/GameDirection";
 import useCheckWinner from "./hooks/useCheckWinner";
+import useSendMoveToAI from "./hooks/useSendMoveToAI";
 
 const initialBoard = [
   [0, 1, 0, 1, 0, 1, 0, 1],
@@ -28,6 +29,8 @@ const AppContent = () => {
   const [winner, setWinner] = useState(null);
   const [gameOver, setGameOver] = useState(false);
   const { gameType, setGameType } = useGameContext();
+
+  const sendMoveToAI = useSendMoveToAI(setBoard, setGameOver, setCurrentPlayer);
 
   useEffect(() => {
     resetGame();
@@ -49,23 +52,6 @@ const AppContent = () => {
       setGameOver(false);
     } catch (error) {
       console.error("Error resetting game:", error);
-    }
-  };
-
-  const sendMoveToAI = async (move) => {
-    try {
-      const apiUrl = process.env["API_URL"] || "http://localhost:5000";
-      const response = await fetch(`${apiUrl}/checkers/move`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ move }),
-      });
-      const data = await response.json();
-      setBoard(data.board);
-      setGameOver(data.game_over);
-      setCurrentPlayer(-1); // Back to human
-    } catch (error) {
-      console.error("Error communicating with AI:", error);
     }
   };
 
