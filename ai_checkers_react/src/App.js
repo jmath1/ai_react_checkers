@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import Board from "./components/Board";
-import ChessBoard from "./components/ChessBoard";
+import SelectGameType from "./components/SelectGameType";
 import GameControls from "./components/GameControls";
 import ColorControls from "./components/ColorControls";
 
@@ -76,16 +76,7 @@ const AppContent = () => {
 
   return (
     <div className="container">
-      <select
-        value={gameType}
-        onChange={(e) => {
-          setGameType(e.target.value);
-          resetGame();
-        }}
-      >
-        <option value="checkers">Checkers</option>
-        <option value="chess">Chess</option>
-      </select>
+      <SelectGameType gameType={gameType} setGameType={setGameType} />
       <GameDirection
         gameType={gameType}
         winner={winner}
