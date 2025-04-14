@@ -10,6 +10,7 @@ import { GameProvider, useGameContext } from "./context/GameContext";
 import GameDirection from "./components/GameDirection";
 import useCheckWinner from "./hooks/useCheckWinner";
 import useSendMoveToAI from "./hooks/useSendMoveToAI";
+import useResetGame from "./hooks/useResetGame";
 
 const initialBoard = [
   [0, 1, 0, 1, 0, 1, 0, 1],
@@ -31,29 +32,19 @@ const AppContent = () => {
   const { gameType, setGameType } = useGameContext();
 
   const sendMoveToAI = useSendMoveToAI(setBoard, setGameOver, setCurrentPlayer);
+  const resetGame = useResetGame(
+    setBoard,
+    setCurrentPlayer,
+    setSelectedPiece,
+    setWinner,
+    setGameOver
+  );
 
   useEffect(() => {
     resetGame();
   }, []);
 
   useCheckWinner(board, setWinner);
-
-  const resetGame = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/checkers/reset", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await response.json();
-      setBoard(data.board);
-      setCurrentPlayer(-1);
-      setSelectedPiece(null);
-      setWinner(null);
-      setGameOver(false);
-    } catch (error) {
-      console.error("Error resetting game:", error);
-    }
-  };
 
   return (
     <div className="container">
