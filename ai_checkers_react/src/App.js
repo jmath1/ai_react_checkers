@@ -4,7 +4,7 @@ import Board from "./components/Board";
 import GameSettings from "./components/GameSettings";
 
 import { ColorProvider } from "./context/ColorContext";
-import { GameProvider, useGameContext } from "./context/GameContext";
+import { GameProvider } from "./context/GameContext";
 
 import useCheckWinner from "./hooks/useCheckWinner";
 import useSendMoveToAI from "./hooks/useSendMoveToAI";

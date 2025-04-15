@@ -3,14 +3,25 @@ import { useColorContext } from "../context/ColorContext";
 
 const CheckersPiece = ({ piece }) => {
   const { humanColor, aiColor } = useColorContext();
-  const pieceColor = piece > 0 ? aiColor : humanColor;
+
+  const getPieceColor = () => {
+    return piece > 0 ? aiColor : humanColor;
+  };
+
+  const getPieceClassName = () => {
+    return `piece ${Math.abs(piece) === 2 ? "king" : ""}`;
+  };
+
+  const pieceType = () => {
+    return Math.abs(piece) === 2 && <span className="king-label">★</span>;
+  };
+
+  const pieceColor = getPieceColor();
+  const pieceClassName = getPieceClassName();
 
   return (
-    <div
-      className={`piece ${Math.abs(piece) === 2 ? "king" : ""}`}
-      style={{ backgroundColor: pieceColor }}
-    >
-      {Math.abs(piece) === 2 && <span className="king-label">★</span>}
+    <div className={pieceClassName} style={{ backgroundColor: pieceColor }}>
+      {pieceType()}
     </div>
   );
 };

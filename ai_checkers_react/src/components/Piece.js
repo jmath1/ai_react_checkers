@@ -7,7 +7,6 @@ import ChessPiece from "./ChessPiece";
 const Piece = ({ piece }) => {
   const { humanColor, aiColor } = useColorContext();
 
-  // Determine the color of the piece based on the game type
   const getPieceColor = () => {
     return piece > 0 ? aiColor : humanColor;
   };

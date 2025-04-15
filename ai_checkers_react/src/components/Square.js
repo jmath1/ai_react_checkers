@@ -3,14 +3,22 @@ import CheckersPiece from "./CheckersPiece";
 import { useColorContext } from "../context/ColorContext";
 const Square = ({ row, col, piece, selectedPiece, handleSquareClick }) => {
   const { darkSquareColor, lightSquareColor } = useColorContext();
-  const isDark = (row + col) % 2 === 1;
-  const isSelected =
-    selectedPiece && selectedPiece[0] === row && selectedPiece[1] === col;
+
+  const getBackgroundColor = () => {
+    const isDark = (row + col) % 2 === 1;
+    return isDark ? darkSquareColor : lightSquareColor;
+  };
+
+  const getSelection = () =>
+    selectedPiece?.[0] === row && selectedPiece?.[1] === col ? "selected" : "";
+
+  const backgroundColor = getBackgroundColor();
+  const selection = getSelection();
 
   return (
     <div
-      className={`square ${isSelected ? "selected" : ""}`}
-      style={{ backgroundColor: isDark ? darkSquareColor : lightSquareColor }}
+      className={`square ${selection}`}
+      style={{ backgroundColor: backgroundColor }}
       onClick={() => handleSquareClick(row, col)}
     >
       {piece !== 0 && <CheckersPiece piece={piece} />}
