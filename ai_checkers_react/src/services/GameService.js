@@ -41,3 +41,27 @@ export const isValidJump = (board, jumpRow, jumpCol) => {
     board[jumpRow][jumpCol] === 0
   );
 };
+
+export const isValidMove = (fromRow, fromCol, toRow, toCol, board) => {
+  const isKing = Math.abs(board[fromRow][fromCol]) === 2;
+
+  const rowDiff = toRow - fromRow;
+  const colDiff = toCol - fromCol;
+  const piece = board[fromRow][fromCol];
+
+  if (Math.abs(rowDiff) !== Math.abs(colDiff)) return false;
+  if (toRow < 0 || toRow > 7 || toCol < 0 || toCol > 7) return false;
+  if (board[toRow][toCol] !== 0) return false;
+
+  if (!isKing && piece < 0 && rowDiff > 0) return false;
+
+  if (Math.abs(rowDiff) === 1) return true;
+
+  if (Math.abs(rowDiff) === 2) {
+    const midRow = (fromRow + toRow) / 2;
+    const midCol = (fromCol + toCol) / 2;
+    const midPiece = board[midRow][midCol];
+    return midPiece !== 0 && midPiece > 0;
+  }
+  return false;
+};

@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Square from "./Square";
 import { useGameContext } from "../context/GameContext";
-import { getDirections, isValidJump } from "../services/GameService";
+import {
+  getDirections,
+  isValidJump,
+  isValidMove,
+} from "../services/GameService";
+import useSendMoveToAI from "../hooks/useSendMoveToAI";
 
-const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
+const Board = () => {
+  const sendMoveToAI = useSendMoveToAI();
+  const [selectedPiece, setSelectedPiece] = useState(null);
+
   const {
     board,
     currentPlayer,
@@ -54,8 +62,7 @@ const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
 
     if (selectedPiece) {
       const [fromRow, fromCol] = selectedPiece;
-      const isKing = Math.abs(board[fromRow][fromCol]) === 2;
-      const validMove = isValidMove(fromRow, fromCol, row, col, isKing);
+      const validMove = isValidMove(fromRow, fromCol, row, col, board);
 
       if (validMove) {
         const move = [fromRow, fromCol, row, col];
@@ -69,28 +76,6 @@ const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
         setSelectedPiece(null);
       }
     }
-  };
-
-  const isValidMove = (fromRow, fromCol, toRow, toCol, isKing) => {
-    const rowDiff = toRow - fromRow;
-    const colDiff = toCol - fromCol;
-    const piece = board[fromRow][fromCol];
-
-    if (Math.abs(rowDiff) !== Math.abs(colDiff)) return false;
-    if (toRow < 0 || toRow > 7 || toCol < 0 || toCol > 7) return false;
-    if (board[toRow][toCol] !== 0) return false;
-
-    if (!isKing && piece < 0 && rowDiff > 0) return false;
-
-    if (Math.abs(rowDiff) === 1) return true;
-
-    if (Math.abs(rowDiff) === 2) {
-      const midRow = (fromRow + toRow) / 2;
-      const midCol = (fromCol + toCol) / 2;
-      const midPiece = board[midRow][midCol];
-      return midPiece !== 0 && midPiece > 0;
-    }
-    return false;
   };
 
   const applyMove = (board, move) => {

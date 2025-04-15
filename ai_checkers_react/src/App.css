@@ -93,9 +93,8 @@
   cursor: pointer;
 }
 
-/*
-moving options should glow
-*/
 .moving-option {
   background-color: #d2d269 !important;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.4),
+    /* Inner shadow for depth */ inset 0 -2px 8px rgba(0, 0, 0, 0.3);
 }
