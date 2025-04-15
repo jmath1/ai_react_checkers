@@ -11,9 +11,10 @@ const useResetGame = () => {
   } = useGameContext();
   const resetGame = useCallback(async () => {
     try {
+      console.log("Trying to hit the endpoint");
       const apiUrl = process.env["API_URL"] || "http://localhost:5000";
 
-      const response = await fetch(`http://${apiUrl}/reset`, {
+      const response = await fetch(`${apiUrl}/reset`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });

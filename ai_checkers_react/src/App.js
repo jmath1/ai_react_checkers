@@ -24,7 +24,7 @@ const AppContent = () => {
 
   return (
     <div className="container">
-      <GameSettings resetGame={resetGame} />
+      <GameSettings />
       <div className="board-container">
         <Board
           selectedPiece={selectedPiece}
