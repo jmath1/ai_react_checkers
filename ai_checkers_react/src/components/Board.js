@@ -5,6 +5,7 @@ import {
   getDirections,
   isValidJump,
   isValidMove,
+  applyMoveToBoard,
 } from "../services/GameService";
 import useSendMoveToAI from "../hooks/useSendMoveToAI";
 
@@ -66,7 +67,7 @@ const Board = () => {
 
       if (validMove) {
         const move = [fromRow, fromCol, row, col];
-        const newBoard = applyMove(board, move);
+        const newBoard = applyMoveToBoard(board, move);
         setMovingOptions([]);
         setBoard(newBoard);
         setSelectedPiece(null);
@@ -76,22 +77,6 @@ const Board = () => {
         setSelectedPiece(null);
       }
     }
-  };
-
-  const applyMove = (board, move) => {
-    const newBoard = board.map((row) => [...row]);
-    const [fromRow, fromCol, toRow, toCol] = move;
-    newBoard[toRow][toCol] = newBoard[fromRow][fromCol];
-    newBoard[fromRow][fromCol] = 0;
-    if (Math.abs(toRow - fromRow) === 2) {
-      const midRow = (fromRow + toRow) / 2;
-      const midCol = (fromCol + toCol) / 2;
-      newBoard[midRow][midCol] = 0;
-    }
-    if (toRow === 0 && newBoard[toRow][toCol] === -1)
-      newBoard[toRow][toCol] = -2; // Black King
-    if (toRow === 7 && newBoard[toRow][toCol] === 1) newBoard[toRow][toCol] = 2; // Red King
-    return newBoard;
   };
 
   return (

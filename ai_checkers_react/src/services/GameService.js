@@ -65,3 +65,32 @@ export const isValidMove = (fromRow, fromCol, toRow, toCol, board) => {
   }
   return false;
 };
+
+export const applyMoveToBoard = (board, move) => {
+  const jump = (fromRow, fromCol, toRow, toCol, newBoard) => {
+    if (Math.abs(toRow - fromRow) === 2) {
+      const midRow = (fromRow + toRow) / 2;
+      const midCol = (fromCol + toCol) / 2;
+      newBoard[midRow][midCol] = 0;
+    }
+  };
+
+  const promoteKing = (toRow, toCol, newBoard) => {
+    if (toRow === 0 && newBoard[toRow][toCol] === -1) {
+      newBoard[toRow][toCol] = -2; // Black King
+    } else if (toRow === 7 && newBoard[toRow][toCol] === 1) {
+      newBoard[toRow][toCol] = 2; // Red King
+    }
+  };
+
+  const newBoard = board.map((row) => [...row]);
+
+  const [fromRow, fromCol, toRow, toCol] = move;
+
+  newBoard[toRow][toCol] = newBoard[fromRow][fromCol];
+  newBoard[fromRow][fromCol] = 0;
+
+  jump(fromRow, fromCol, toRow, toCol, newBoard);
+  promoteKing(toRow, toCol, newBoard);
+  return newBoard;
+};
