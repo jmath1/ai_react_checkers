@@ -1,15 +1,18 @@
 import { useCallback } from "react";
+import { useGameContext } from "../context/GameContext";
 
-const useResetGame = (
-  setBoard,
-  setCurrentPlayer,
-  setSelectedPiece,
-  setWinner,
-  setGameOver
-) => {
+const useResetGame = () => {
+  const {
+    gameType,
+    setBoard,
+    setCurrentPlayer,
+    setSelectedPiece,
+    setWinner,
+    setGameOver,
+  } = useGameContext();
   const resetGame = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:5000/checkers/reset", {
+      const response = await fetch(`http://localhost:5000/${gameType}/reset`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });

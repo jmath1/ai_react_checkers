@@ -1,6 +1,7 @@
 import { useCallback } from "react";
-
-const useSendMoveToAI = (setBoard, setGameOver, setCurrentPlayer) => {
+import { useGameContext } from "../context/GameContext";
+const useSendMoveToAI = () => {
+  const { setBoard, setGameOver, setCurrentPlayer } = useGameContext();
   const sendMoveToAI = useCallback(
     async (move) => {
       try {

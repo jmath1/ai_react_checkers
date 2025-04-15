@@ -1,16 +1,11 @@
 import React from "react";
 import Square from "./Square";
+import { useGameContext } from "../context/GameContext";
 
-const Board = ({
-  board,
-  currentPlayer,
-  selectedPiece,
-  setSelectedPiece,
-  setBoard,
-  setCurrentPlayer,
-  sendMoveToAI,
-  gameOver,
-}) => {
+const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
+  const { board, currentPlayer, gameOver, setBoard, setCurrentPlayer } =
+    useGameContext();
+
   const handleSquareClick = (row, col) => {
     if (currentPlayer !== -1 || gameOver) return;
 

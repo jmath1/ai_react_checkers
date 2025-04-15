@@ -1,6 +1,7 @@
 import React from "react";
-
-const GameDirection = ({ gameType, winner, gameOver, currentPlayer }) => {
+import { useGameContext } from "../context/GameContext";
+const GameDirection = () => {
+  const { gameType, currentPlayer, gameOver, winner } = useGameContext();
   return (
     <div>
       <h1>{gameType === "checkers" ? "Checkers" : "Chess"} Game</h1>

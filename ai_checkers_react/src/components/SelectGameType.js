@@ -1,8 +1,13 @@
 import React from "react";
+import useResetGame from "../hooks/useResetGame";
+import { useGameContext } from "../context/GameContext";
+const SelectGameType = () => {
+  const { setGameType, gameType } = useGameContext();
+  const resetGame = useResetGame();
 
-const SelectGameType = ({ gameType, setGameType }) => {
   const handleGameTypeChange = (event) => {
     setGameType(event.target.value);
+    resetGame();
   };
 
   return (
