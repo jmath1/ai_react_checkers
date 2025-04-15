@@ -6,7 +6,7 @@ const useSendMoveToAI = () => {
     async (move) => {
       try {
         const apiUrl = process.env["API_URL"] || "http://localhost:5000";
-        const response = await fetch(`${apiUrl}/checkers/move`, {
+        const response = await fetch(`${apiUrl}/move`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ move }),

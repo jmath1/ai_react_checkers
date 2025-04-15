@@ -1,14 +1,16 @@
 import React from "react";
 import { useGameContext } from "../context/GameContext";
 const GameDirection = () => {
-  const { gameType, currentPlayer, gameOver, winner } = useGameContext();
+  const { currentPlayer, gameOver, winner } = useGameContext();
+  const winnerText = winner === -1 ? "You" : winner === 1 ? "AI" : null;
+  const currentPlayerText = currentPlayer === 1 ? "AI" : "You";
+
   return (
-    <div>
-      <h1>{gameType === "checkers" ? "Checkers" : "Chess"} Game</h1>
-      <p>Current Player: {currentPlayer === -1 ? "You" : "AI"}</p>
-      {winner && (
-        <p className="winner">Winner: {winner === -1 ? "You" : "AI"}!</p>
-      )}
+    <div style={{ textAlign: "center" }}>
+      <p>Current Player: {currentPlayerText}</p>
+
+      {winnerText ? <p className="winner">Winner: {winnerText}!</p> : null}
+
       {gameOver && !winner && <p className="winner">Game Over!</p>}
     </div>
   );

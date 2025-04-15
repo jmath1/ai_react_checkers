@@ -12,7 +12,7 @@ checkers_game = Checkers()
 chess_game = Chess()
 
 # Checkers routes
-@app.route('/checkers/move', methods=['POST'])
+@app.route('/move', methods=['POST'])
 def checkers_move():
     try:
         data = request.get_json()
@@ -36,28 +36,10 @@ def checkers_move():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/checkers/reset', methods=['POST'])
+@app.route('/reset', methods=['POST'])
 def checkers_reset():
     checkers_game.reset()
     return jsonify({"board": checkers_game.current_board})
-
-# Chess routes
-@app.route('/chess/move', methods=['POST'])
-def chess_move():
-    try:
-        data = request.get_json()
-        move_uci = data.get('move')  # e.g., "e2e4"
-        fen = data.get('fen')  # Current board position
-
-        result = chess_game.make_move(move_uci, fen)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/chess/reset', methods=['POST'])
-def chess_reset():
-    chess_game.reset()
-    return jsonify({"fen": chess_game.get_fen()})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
