@@ -31,3 +31,13 @@ export const getDirections = (piece) => {
       return [];
   }
 };
+
+export const isValidJump = (board, jumpRow, jumpCol) => {
+  return (
+    jumpRow >= 0 &&
+    jumpRow < 8 &&
+    jumpCol >= 0 &&
+    jumpCol < 8 &&
+    board[jumpRow][jumpCol] === 0
+  );
+};

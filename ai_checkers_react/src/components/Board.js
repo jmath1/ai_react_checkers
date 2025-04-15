@@ -1,7 +1,7 @@
 import React from "react";
 import Square from "./Square";
 import { useGameContext } from "../context/GameContext";
-import { getDirections } from "../services/GameService";
+import { getDirections, isValidJump } from "../services/GameService";
 
 const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
   const {
@@ -24,20 +24,10 @@ const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
       } else if (Math.sign(board[newRow][newCol]) !== Math.sign(piece)) {
         const jumpRow = newRow + rowDir;
         const jumpCol = newCol + colDir;
-        if (isValidJump(jumpRow, jumpCol)) {
+        if (isValidJump(board, jumpRow, jumpCol)) {
           options.push([jumpRow, jumpCol]);
         }
       }
-    };
-
-    const isValidJump = (jumpRow, jumpCol) => {
-      return (
-        jumpRow >= 0 &&
-        jumpRow < 8 &&
-        jumpCol >= 0 &&
-        jumpCol < 8 &&
-        board[jumpRow][jumpCol] === 0
-      );
     };
 
     for (const [rowDir, colDir] of directions) {
