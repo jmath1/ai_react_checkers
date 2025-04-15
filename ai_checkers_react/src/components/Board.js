@@ -20,6 +20,7 @@ const Board = () => {
     setBoard,
     setCurrentPlayer,
     setMovingOptions,
+    movingOptions,
   } = useGameContext();
 
   const provideMovingOptions = (row, col) => {
@@ -63,7 +64,7 @@ const Board = () => {
 
     if (selectedPiece) {
       const [fromRow, fromCol] = selectedPiece;
-      const validMove = isValidMove(fromRow, fromCol, row, col, board);
+      const validMove = isValidMove(row, col, movingOptions);
 
       if (validMove) {
         const move = [fromRow, fromCol, row, col];
