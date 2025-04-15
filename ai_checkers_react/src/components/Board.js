@@ -10,12 +10,9 @@ const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
     setBoard,
     setCurrentPlayer,
     setMovingOptions,
-    movingOptions,
   } = useGameContext();
 
-  const provideMovingOptions = (row, col) => {
-    // given a row an a column, provide the moving options. The end result will be that movingOptions is populated by a list of possible moves
-    const piece = board[row][col];
+  const getDirections = (piece) => {
     const isKing = Math.abs(piece) === 2;
     const directions = isKing
       ? [
@@ -33,29 +30,41 @@ const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
           [1, -1],
           [1, 1],
         ];
+    return directions;
+  };
+
+  const provideMovingOptions = (row, col) => {
+    const piece = board[row][col];
+    const directions = getDirections(piece);
     const options = [];
+
+    const addMoveOption = (newRow, newCol, rowDir, colDir) => {
+      if (board[newRow][newCol] === 0) {
+        options.push([newRow, newCol]);
+      } else if (Math.sign(board[newRow][newCol]) !== Math.sign(piece)) {
+        const jumpRow = newRow + rowDir;
+        const jumpCol = newCol + colDir;
+        if (isValidJump(jumpRow, jumpCol)) {
+          options.push([jumpRow, jumpCol]);
+        }
+      }
+    };
+
+    const isValidJump = (jumpRow, jumpCol) => {
+      return (
+        jumpRow >= 0 &&
+        jumpRow < 8 &&
+        jumpCol >= 0 &&
+        jumpCol < 8 &&
+        board[jumpRow][jumpCol] === 0
+      );
+    };
 
     for (const [rowDir, colDir] of directions) {
       const newRow = row + rowDir;
       const newCol = col + colDir;
-
       if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-        if (board[newRow][newCol] === 0) {
-          options.push([newRow, newCol]);
-        } else if (Math.sign(board[newRow][newCol]) !== Math.sign(piece)) {
-          const jumpRow = newRow + rowDir;
-          const jumpCol = newCol + colDir;
-
-          if (
-            jumpRow >= 0 &&
-            jumpRow < 8 &&
-            jumpCol >= 0 &&
-            jumpCol < 8 &&
-            board[jumpRow][jumpCol] === 0
-          ) {
-            options.push([jumpRow, jumpCol]);
-          }
-        }
+        addMoveOption(newRow, newCol, rowDir, colDir);
       }
     }
     setMovingOptions(options);
