@@ -1,8 +1,13 @@
 import React from "react";
 import CheckersPiece from "./CheckersPiece";
 import { useColorContext } from "../context/ColorContext";
+import { useGameContext } from "../context/GameContext";
 const Square = ({ row, col, piece, selectedPiece, handleSquareClick }) => {
   const { darkSquareColor, lightSquareColor } = useColorContext();
+  const { movingOptions } = useGameContext();
+  const isMovingOption = movingOptions.some(
+    (option) => option[0] === row && option[1] === col
+  );
 
   const getBackgroundColor = () => {
     const isDark = (row + col) % 2 === 1;
@@ -17,7 +22,7 @@ const Square = ({ row, col, piece, selectedPiece, handleSquareClick }) => {
 
   return (
     <div
-      className={`square ${selection}`}
+      className={`square ${selection} ${isMovingOption ? "moving-option" : ""}`}
       style={{ backgroundColor: backgroundColor }}
       onClick={() => handleSquareClick(row, col)}
     >

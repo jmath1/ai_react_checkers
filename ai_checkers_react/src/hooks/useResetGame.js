@@ -8,6 +8,7 @@ const useResetGame = () => {
     setSelectedPiece,
     setWinner,
     setGameOver,
+    setMovingOptions,
   } = useGameContext();
   const resetGame = useCallback(async () => {
     try {
@@ -24,10 +25,18 @@ const useResetGame = () => {
       setSelectedPiece(null);
       setWinner(null);
       setGameOver(false);
+      setMovingOptions([]);
     } catch (error) {
       console.error("Error resetting game:", error);
     }
-  }, [setBoard, setCurrentPlayer, setSelectedPiece, setWinner, setGameOver]);
+  }, [
+    setBoard,
+    setCurrentPlayer,
+    setSelectedPiece,
+    setWinner,
+    setGameOver,
+    setMovingOptions,
+  ]);
 
   return resetGame;
 };

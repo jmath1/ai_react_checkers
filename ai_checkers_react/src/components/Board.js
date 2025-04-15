@@ -3,8 +3,64 @@ import Square from "./Square";
 import { useGameContext } from "../context/GameContext";
 
 const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
-  const { board, currentPlayer, gameOver, setBoard, setCurrentPlayer } =
-    useGameContext();
+  const {
+    board,
+    currentPlayer,
+    gameOver,
+    setBoard,
+    setCurrentPlayer,
+    setMovingOptions,
+    movingOptions,
+  } = useGameContext();
+
+  const provideMovingOptions = (row, col) => {
+    // given a row an a column, provide the moving options. The end result will be that movingOptions is populated by a list of possible moves
+    const piece = board[row][col];
+    const isKing = Math.abs(piece) === 2;
+    const directions = isKing
+      ? [
+          [-1, -1],
+          [-1, 1],
+          [1, -1],
+          [1, 1],
+        ]
+      : piece < 0
+      ? [
+          [-1, -1],
+          [-1, 1],
+        ]
+      : [
+          [1, -1],
+          [1, 1],
+        ];
+    const options = [];
+
+    for (const [rowDir, colDir] of directions) {
+      const newRow = row + rowDir;
+      const newCol = col + colDir;
+
+      if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+        if (board[newRow][newCol] === 0) {
+          options.push([newRow, newCol]);
+        } else if (Math.sign(board[newRow][newCol]) !== Math.sign(piece)) {
+          const jumpRow = newRow + rowDir;
+          const jumpCol = newCol + colDir;
+
+          if (
+            jumpRow >= 0 &&
+            jumpRow < 8 &&
+            jumpCol >= 0 &&
+            jumpCol < 8 &&
+            board[jumpRow][jumpCol] === 0
+          ) {
+            options.push([jumpRow, jumpCol]);
+          }
+        }
+      }
+    }
+    setMovingOptions(options);
+    return options;
+  };
 
   const handleSquareClick = (row, col) => {
     if (currentPlayer !== -1 || gameOver) return;
@@ -13,6 +69,7 @@ const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
 
     if (!selectedPiece && piece !== 0 && piece < 0) {
       setSelectedPiece([row, col]);
+      provideMovingOptions(row, col);
       return;
     }
 
@@ -24,6 +81,7 @@ const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
       if (validMove) {
         const move = [fromRow, fromCol, row, col];
         const newBoard = applyMove(board, move);
+        setMovingOptions([]);
         setBoard(newBoard);
         setSelectedPiece(null);
         setCurrentPlayer(1);

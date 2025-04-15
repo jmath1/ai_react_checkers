@@ -92,3 +92,10 @@
   border: none;
   cursor: pointer;
 }
+
+/*
+moving options should glow
+*/
+.moving-option {
+  background-color: #d2d269 !important;
+}
