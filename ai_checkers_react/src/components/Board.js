@@ -11,7 +11,7 @@ import useSendMoveToAI from "../hooks/useSendMoveToAI";
 
 const Board = () => {
   const sendMoveToAI = useSendMoveToAI();
-  const [selectedPiece, setSelectedPiece] = useState(null);
+  const { selectedPiece, setSelectedPiece } = useGameContext();
 
   const {
     board,

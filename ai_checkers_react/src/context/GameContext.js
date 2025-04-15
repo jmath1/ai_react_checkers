@@ -19,6 +19,7 @@ export const GameProvider = ({ children }) => {
   const [winner, setWinner] = useState(null);
   const [gameOver, setGameOver] = useState(false);
   const [movingOptions, setMovingOptions] = useState([]);
+  const [selectedPiece, setSelectedPiece] = useState(null);
 
   return (
     <GameContext.Provider
@@ -33,6 +34,8 @@ export const GameProvider = ({ children }) => {
         setGameOver,
         movingOptions,
         setMovingOptions,
+        selectedPiece,
+        setSelectedPiece,
       }}
     >
       {children}
