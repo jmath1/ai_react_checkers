@@ -1,6 +1,7 @@
 import React from "react";
 import Square from "./Square";
 import { useGameContext } from "../context/GameContext";
+import { getDirections } from "../services/GameService";
 
 const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
   const {
@@ -11,27 +12,6 @@ const Board = ({ selectedPiece, setSelectedPiece, sendMoveToAI }) => {
     setCurrentPlayer,
     setMovingOptions,
   } = useGameContext();
-
-  const getDirections = (piece) => {
-    const isKing = Math.abs(piece) === 2;
-    const directions = isKing
-      ? [
-          [-1, -1],
-          [-1, 1],
-          [1, -1],
-          [1, 1],
-        ]
-      : piece < 0
-      ? [
-          [-1, -1],
-          [-1, 1],
-        ]
-      : [
-          [1, -1],
-          [1, 1],
-        ];
-    return directions;
-  };
 
   const provideMovingOptions = (row, col) => {
     const piece = board[row][col];
