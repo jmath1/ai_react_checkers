@@ -19,10 +19,18 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NUMBER }}:role/CheckersGithubRunner
           aws-region: us-east-1
-      - name: Build
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+      - name: Install Dependencies
         run: |
           cd ai_checkers_react
           npm install
+      - name: Build
+        run: |
           npm run build
       - name: Sync S3
         run: |
