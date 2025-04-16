@@ -1,8 +1,7 @@
 import React from "react";
 import { useGameContext } from "../context/GameContext";
-import { useCheckWinner } from "../hooks/useCheckWinner";
 const GameDirection = ({ board }) => {
-  const { currentPlayer, gameOver, winner } = useGameContext();
+  const { gameOver, winner } = useGameContext();
 
   const getWinnerText = (winner) => {
     if (winner === -1) return "You";
@@ -10,12 +9,12 @@ const GameDirection = ({ board }) => {
     return null;
   };
 
-  const getCurrentPlayerText = (currentPlayer) => {
-    return currentPlayer === 1 ? "AI" : "You";
-  };
+  // const getCurrentPlayerText = (currentPlayer) => {
+  //   return currentPlayer === 1 ? "AI" : "You";
+  // };
 
   const winnerText = getWinnerText(winner);
-  const currentPlayerText = getCurrentPlayerText(currentPlayer);
+  // const currentPlayerText = getCurrentPlayerText(currentPlayer);
 
   return (
     <div style={{ textAlign: "center" }}>

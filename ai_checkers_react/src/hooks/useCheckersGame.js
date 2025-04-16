@@ -159,7 +159,6 @@ export function useCheckersGame() {
 
   const resetGame = useCallback(() => {
     setBoard(deepCopy(initialBoard));
-    console.log(board);
   }, [setBoard]);
 
   const sendMoveToAI = useCallback(

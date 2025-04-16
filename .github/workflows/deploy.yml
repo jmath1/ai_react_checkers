@@ -30,7 +30,7 @@ jobs:
           cd ai_checkers_react
           npm install
           npm run build
-      - name: Sync S3
+      - name: Sync S3 and Make a Cache Invalidation
         run: |
           aws s3 sync ./build s3://${{ secrets.S3_BUCKET_NAME }}/ --delete
           aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
