@@ -27,3 +27,5 @@ yarn-error.log*
 .env
 .terraform
 .terraform.lock.hcl
+inventory.ini
+build/
