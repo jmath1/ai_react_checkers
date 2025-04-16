@@ -1,6 +1,15 @@
 version: "3"
 
 tasks:
+  push:
+    description: Build and push all images to registry
+    usage: "task push"
+    cmds:
+      - registry_url=$(terraform -chdir=_infrastructure/terraform/ output -raw registry_url );
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${registry_url};
+        docker build --file _infrastructure/docker/Dockerfile . -t ${registry_url}:checkers;
+        docker push ${registry_url}:checkers;
+
   tf_init:
     description: Init infrastructure.
     usage: "task tf_init"

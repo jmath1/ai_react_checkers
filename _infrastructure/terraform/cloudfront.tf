@@ -1,18 +1,18 @@
 
 resource "null_resource" "build_and_deploy" {
+  depends_on = [ aws_s3_bucket.checkers_bucket, aws_cloudfront_distribution.react_app ]
   triggers = {
-    always_run = sha1(join("", [
-      filesha1("${var.react_app_path}/package.json"),
-      filesha1("${var.react_app_path}/package-lock.json"),
-    ]))
+    build_dir_hash = local.app_hash
   }
 
   provisioner "local-exec" {
     command = <<EOT
       cd ${var.react_app_path} && \
       npm install && \
-      REACT_APP_BACKEND=https://checkers-api.${var.domain_name}.${var.tld}  npm run build && \
+      REACT_APP_API_URL=https://checkers-api.${var.domain_name}.${var.tld}  npm run build && \
       aws s3 sync build/ s3://${aws_s3_bucket.checkers_bucket.id}/ --delete
+      aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.react_app.id} --paths "/*"
+
     EOT
   }
 }
@@ -20,7 +20,6 @@ resource "null_resource" "build_and_deploy" {
 
 # CloudFront Distribution
 resource "aws_cloudfront_distribution" "react_app" {
-  depends_on = [null_resource.build_and_deploy]
   aliases = ["checkers.${var.domain_name}.${var.tld}"]
 
   origin {

@@ -12,7 +12,12 @@
       - python3-certbot-nginx
     state: present
     update_cache: yes
-  when: use_vpc | bool == false
+
+- name: Turn off firewall for port 80 for certbot
+  ufw:
+    rule: allow
+    port: 80
+    proto: tcp
 
 - name: Obtain SSL Certificate
   command: >
@@ -20,30 +25,23 @@
     -m {{ email }} -d {{ domain_name }}
   register: certbot_result
   changed_when: "'Congratulations' in certbot_result.stdout"
-  when: use_vpc | bool == false
 
 - name: Create nginx configuration
   copy:
-    dest: /etc/nginx/sites-available/portfolio
+    dest: /etc/nginx/sites-available/checkers
     content: |
       server {
-          {% if use_vpc | bool == false %}
           listen 443 ssl;
-          {% else %}
-          listen 80;
-          {% endif %}
 
           server_name {{ domain_name }};
           
-          {% if use_vpc | bool == false %}
           ssl_certificate /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
           ssl_certificate_key /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
-          {% endif %}
 
           client_max_body_size 2M;
 
           location / {
-              proxy_pass http://127.0.0.1:8000;
+              proxy_pass http://127.0.0.1:5000;
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -53,7 +51,7 @@
 
 - name: Enable site and reload nginx
   shell: |
-    ln -sf /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/portfolio
+    ln -sf /etc/nginx/sites-available/checkers /etc/nginx/sites-enabled/checkers
     rm -f /etc/nginx/sites-enabled/default || true
     nginx -t
     systemctl reload nginx
@@ -64,7 +62,6 @@
     job: "certbot renew --quiet && systemctl reload nginx"
     minute: 0
     hour: 0
-  when: use_vpc | bool == false
 
 - name: Turn on UFW
   ufw:

@@ -3,7 +3,8 @@
   hosts: portfolio
   become: yes
   vars:
-    domain_name: "api.{{ lookup('env', 'TF_VAR_domain_name') }}.{{ lookup('env', 'TF_VAR_tld') }}"
+    domain_name: "checkers-api.{{ lookup('env', 'TF_VAR_domain_name') }}.{{ lookup('env', 'TF_VAR_tld') }}"
+    email: "{{ lookup('env', 'TF_VAR_email') }}"
 
   roles:
     - role: flask
