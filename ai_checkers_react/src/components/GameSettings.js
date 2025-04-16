@@ -2,12 +2,13 @@ import React from "react";
 import GameDirection from "./GameDirection";
 import ColorControls from "./ColorControls";
 import ResetButton from "./ResetButton";
-const GameSettings = () => {
+const GameSettings = ({ checkersGame }) => {
+  const { board, resetGame } = checkersGame;
   return (
     <div>
-      <GameDirection />
+      <GameDirection board={board} />
       <ColorControls />
-      <ResetButton />
+      <ResetButton resetGame={resetGame} />
     </div>
   );
 };

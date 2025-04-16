@@ -1,7 +1,6 @@
 import React from "react";
-import useResetGame from "../hooks/useResetGame";
-const ResetButton = () => {
-  const resetGame = useResetGame();
+
+const ResetButton = ({ resetGame }) => {
   const handleReset = () => {
     resetGame();
   };

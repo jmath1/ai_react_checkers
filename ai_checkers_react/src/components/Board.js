@@ -1,24 +1,16 @@
 import React from "react";
 import Square from "./Square";
 import { useGameContext } from "../context/GameContext";
-import {
-  getDirections,
-  isValidJump,
-  isValidMove,
-  applyMoveToBoard,
-} from "../utils/GameUtils";
-import useSendMoveToAI from "../hooks/useSendMoveToAI";
+import { getDirections, isValidJump, isValidMove } from "../utils/GameUtils";
 
-const Board = () => {
-  const sendMoveToAI = useSendMoveToAI();
-  const { selectedPiece, setSelectedPiece } = useGameContext();
-
+const Board = ({ checkersGame }) => {
+  const { sendMoveToAI, board } = checkersGame;
   const {
-    board,
+    selectedPiece,
+    setSelectedPiece,
     currentPlayer,
-    gameOver,
-    setBoard,
     setCurrentPlayer,
+    gameOver,
     setMovingOptions,
     movingOptions,
   } = useGameContext();
@@ -47,6 +39,7 @@ const Board = () => {
         addMoveOption(newRow, newCol, rowDir, colDir);
       }
     }
+
     setMovingOptions(options);
     return options;
   };
@@ -68,11 +61,9 @@ const Board = () => {
 
       if (validMove) {
         const move = [fromRow, fromCol, row, col];
-        const newBoard = applyMoveToBoard(board, move);
         setMovingOptions([]);
-        setBoard(newBoard);
         setSelectedPiece(null);
-        setCurrentPlayer(1);
+        setCurrentPlayer(-1);
         sendMoveToAI(move);
       } else {
         setSelectedPiece(null);

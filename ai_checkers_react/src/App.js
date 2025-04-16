@@ -6,22 +6,15 @@ import GameSettings from "./components/GameSettings";
 import { ColorProvider } from "./context/ColorContext";
 import { GameProvider } from "./context/GameContext";
 
-import useCheckWinner from "./hooks/useCheckWinner";
-import useResetGame from "./hooks/useResetGame";
+import { useCheckersGame } from "./hooks/useCheckersGame";
 
 const AppContent = () => {
-  const resetGame = useResetGame();
-
-  useEffect(() => {
-    resetGame();
-  }, [resetGame]);
-
-  useCheckWinner();
+  const checkersGame = useCheckersGame();
 
   return (
     <div className="container">
-      <GameSettings />
-      <Board />
+      <GameSettings checkersGame={checkersGame} />
+      <Board checkersGame={checkersGame} />
     </div>
   );
 };

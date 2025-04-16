@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useGameContext } from "../context/GameContext";
-const useCheckWinner = () => {
-  const { board, setWinner } = useGameContext();
+
+const useCheckWinner = (board) => {
+  const { setWinner } = useGameContext();
   useEffect(() => {
     const redPieces = board.flat().filter((x) => x > 0).length;
     const blackPieces = board.flat().filter((x) => x < 0).length;

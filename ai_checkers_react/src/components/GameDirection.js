@@ -1,6 +1,7 @@
 import React from "react";
 import { useGameContext } from "../context/GameContext";
-const GameDirection = () => {
+import { useCheckWinner } from "../hooks/useCheckWinner";
+const GameDirection = ({ board }) => {
   const { currentPlayer, gameOver, winner } = useGameContext();
 
   const getWinnerText = (winner) => {
@@ -18,7 +19,7 @@ const GameDirection = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <p>Current Player: {currentPlayerText}</p>
+      {/* <p>Current Player: {currentPlayerText}</p> */}
 
       {winnerText && <p className="winner">Winner: {winnerText}!</p>}
 
