@@ -11,7 +11,7 @@ resource "null_resource" "build_and_deploy" {
     command = <<EOT
       cd ${var.react_app_path} && \
       npm install && \
-      REACT_APP_BACKEND=https://chess-api.${var.domain_name}.${var.tld}  npm run build && \
+      REACT_APP_BACKEND=https://checkers-api.${var.domain_name}.${var.tld}  npm run build && \
       aws s3 sync build/ s3://${aws_s3_bucket.checkers_bucket.id}/ --delete
     EOT
   }
@@ -67,7 +67,7 @@ resource "aws_cloudfront_distribution" "react_app" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = data.terraform_remote_state.domain.outputs.acm_main_cert_arn
+    acm_certificate_arn = aws_acm_certificate.checkers_cert.arn
     ssl_support_method = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }

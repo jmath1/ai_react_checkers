@@ -36,33 +36,21 @@ resource "aws_s3_bucket_policy" "public_read_policy" {
   })
 }
 
+resource "aws_s3_bucket_acl" "react_app" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.react_app,
+    aws_s3_bucket_public_access_block._,
+  ]
+  bucket = aws_s3_bucket.checkers_bucket.id
+  acl    = "public-read"
+}
 
-
-# resource "aws_iam_role_policy" "uploader_policy" {
-#   name = "uploader-policy"
-#   role = aws_iam_role.portfolio_role.name
-
-#   policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [
-#       {
-#         Effect = "Allow",
-#         Action = [
-#             "s3:PutObject",
-#             "s3:PutObjectAcl",
-#             "s3:GetObject",
-#             "s3:ListBucket",
-#             "s3:DeleteObject"
-#         ],
-#         Resource = [
-#             "${aws_s3_bucket.checkers_bucket.arn}",
-#             "${aws_s3_bucket.checkers_bucket.arn}/*",
-#         ]
-#       }
-#     ]
-#   })
-# }
-
+resource "aws_s3_bucket_ownership_controls" "react_app" {
+  bucket = aws_s3_bucket.checkers_bucket.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
 
 resource "aws_s3_bucket_cors_configuration" "_" {
   bucket = aws_s3_bucket.checkers_bucket.id

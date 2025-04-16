@@ -1,6 +1,6 @@
 resource "aws_route53_record" "react_app_route" {
   zone_id = data.terraform_remote_state.domain.outputs.route53_zone.id
-  name    = "chess."
+  name    = "checkers.jonathanmath.com"
   type    = "A"
 
   alias {
@@ -12,7 +12,7 @@ resource "aws_route53_record" "react_app_route" {
 
 resource "aws_route53_record" "www_react_app_route" {
   zone_id = data.terraform_remote_state.domain.outputs.route53_zone.id
-  name    = "www.chess."
+  name    = "www.checkers.jonathanmath.com"
   type    = "A"
 
   alias {
