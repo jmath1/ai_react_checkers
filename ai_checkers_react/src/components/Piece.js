@@ -1,8 +1,6 @@
 import React from "react";
 import { useColorContext } from "../context/ColorContext";
-import { useGameContext } from "../context/GameContext";
 import CheckersPiece from "./CheckersPiece";
-import ChessPiece from "./ChessPiece";
 
 const Piece = ({ piece }) => {
   const { humanColor, aiColor } = useColorContext();

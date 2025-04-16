@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Square from "./Square";
 import { useGameContext } from "../context/GameContext";
 import {
@@ -6,7 +6,7 @@ import {
   isValidJump,
   isValidMove,
   applyMoveToBoard,
-} from "../services/GameService";
+} from "../utils/GameUtils";
 import useSendMoveToAI from "../hooks/useSendMoveToAI";
 
 const Board = () => {

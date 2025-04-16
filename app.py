@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from logic.checkers_logic import Checkers
-from logic.chess_logic import Chess
 
 app = Flask(__name__)
 
@@ -9,7 +8,6 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 checkers_game = Checkers()
-chess_game = Chess()
 
 # Checkers routes
 @app.route('/move', methods=['POST'])
