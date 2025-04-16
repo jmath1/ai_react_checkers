@@ -24,3 +24,30 @@ variable "bucket_name" {
   description = "Name of the S3 bucket for the React app"
   type        = string
 }
+
+variable "github_thumbprint" {
+  type    = string
+  default = "6938fd4d98bab03faadb97b34396831e3780aea1"
+}
+
+variable "github_repository_owner" {
+  description = "GitHub repository owner"
+  type        = string
+  default     = "jmath1"
+}
+
+variable "github_repository_repo" {
+  description = "GitHub repository name"
+  type        = string
+  default     = "ai_react_checkers"
+}
+
+variable "aws_account_number" {
+  description = "AWS account number"
+  type        = string
+}
+
+variable "github_token" {
+  description = "GitHub token for Actions"
+  type        = string
+}

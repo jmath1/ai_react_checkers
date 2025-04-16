@@ -21,12 +21,3 @@ resource "aws_route53_record" "www_react_app_route" {
     evaluate_target_health = false
   }
 }
-
-
-resource "aws_route53_record" "checkers_api" {
-  zone_id = data.terraform_remote_state.domain.outputs.route53_zone.id
-  name    = "checkers-api.jonathanmath.com"
-  type    = "A"
-  ttl     = 300
-  records = [local.ec2_instance_ip_address]
-}

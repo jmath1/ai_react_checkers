@@ -1,0 +1,30 @@
+name: Sync S3 and Make a Cache Invalidation
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Authenticate with AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NUMBER }}:role/CheckersGithubRunner
+          aws-region: us-east-1
+      - name: Build
+        run: |
+          cd ai_checkers_react
+          npm install
+          npm run build
+      - name: Sync S3
+        run: |
+          aws s3 sync ./build s3://${{ secrets.S3_BUCKET_NAME }}/ --delete
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
