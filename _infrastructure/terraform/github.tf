@@ -100,3 +100,9 @@ resource "github_actions_secret" "s3_bucket_name" {
   secret_name = "S3_BUCKET_NAME"
   plaintext_value = var.bucket_name
 }
+
+resource "github_actions_secret" "cf_distribution_id" {
+  repository  = var.github_repository_repo
+  secret_name = "CLOUDFRONT_DISTRIBUTION_ID"
+  plaintext_value = aws_cloudfront_distribution.react_app.id
+}
